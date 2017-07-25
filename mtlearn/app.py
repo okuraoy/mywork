@@ -8,6 +8,7 @@ import sys
 from optparse import OptionParser
 import time
 import datasets
+from model.model_base import RidgeModel
 
 GLOBAL_ARGS = {}
 
@@ -18,7 +19,7 @@ def get_model(data):
         # estimator = LinearRegression()
     elif GLOBAL_ARGS['model'] == 'ridge':
         print ""
-        # estimator = RidgeCV(alphas=[0.1, 0.5, 1.0, 5.0, 10.0])
+        estimator = RidgeModel(data)
     elif GLOBAL_ARGS['model'] == 'rf':
         print ""
         # estimator = RandomForestRegressor(n_estimators=200, max_depth=3, max_features='sqrt',
@@ -27,7 +28,7 @@ def get_model(data):
         print ""
         # estimator = GradientBoostingRegressor(n_estimators=300, learning_rate=0.01,
         #                                       max_depth=3, random_state=0, loss='ls')
-    return ""
+    return estimator
 
 
 def process_input():
@@ -75,6 +76,7 @@ def process_input():
 def main():
     pcs = datasets.load_pcs_data()
     estimator = get_model(pcs)
+    estimator.test()
 
 
 if __name__ == '__main__':
