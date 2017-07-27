@@ -55,6 +55,9 @@ class ModelBase(object):
     @abstractmethod
     def predict(self, data):
         print '{0} model predict'.format(self.__class__.__name__)
+        save_clf = joblib.load(self._model_file)
+        if save_clf:
+            self._clf = save_clf
         self._pre_result = self._clf.predict(data)
 
     def _cross_validation(self, cv=5):
@@ -93,9 +96,12 @@ class RidgeModel(ModelBase):
 
 
 class GBDTModel(ModelBase):
+    """
+     GBDT算法模型
+    """
+
     def __init__(self, data, params=None):
         super(GBDTModel, self, ).__init__(data, params)
-
         self._clf = GradientBoostingRegressor(n_estimators=300, learning_rate=0.01,
                                               max_depth=3, random_state=0, loss='ls')
 
@@ -108,9 +114,9 @@ class GBDTModel(ModelBase):
 
     def test(self):
         super(GBDTModel, self, ).test()
-        self._score = -self._score['neg_mean_squared_error']
-        print 'Accuracy mse / mean / std: %0.2f %0.2f (+/- %0.2f)' % (
-            self._score, self._score.mean(), self._score.std() * 2)
+        feature_importance = self._clf.feature_importances_
+        mse = -self._score['neg_mean_squared_error']
+        print 'MSE / Mean / Std: %0.2f %0.2f (+/- %0.2f)' % (mse, mse.mean(), mse.std() * 2)
 
     def predict(self, data):
         super(GBDTModel, self, ).predict(data)

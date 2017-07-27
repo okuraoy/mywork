@@ -4,7 +4,7 @@
 Created by guanlei on 2017/7/20
 """
 
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import explained_variance_score, mean_squared_error
 import matplotlib.pylab as plt
 from matplotlib.pylab import rcParams
 
@@ -17,9 +17,10 @@ rcParams['axes.unicode_minus'] = False
 
 def plot_predict_result(predict, actual):
     mse = mean_squared_error(actual, predict)
+    evs = explained_variance_score(actual, predict)
     # predicts = pd.DataFrame(np.array(predicts), index=test.index)
     plt.plot(actual.inx, actual.data, label="actual", color='blue')
     plt.plot(actual.inx, predict, label="predict", color='red')
     plt.legend(loc='best')
-    plt.title('MSE: %.4f' % mse)
+    plt.title(' Mean squared error: %.4f,Explained variance score:%.4f' % (mse, evs))
     plt.show()
