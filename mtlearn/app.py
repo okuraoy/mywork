@@ -7,8 +7,9 @@ Created by guanlei on 2017/7/20
 import sys
 from optparse import OptionParser
 import time
+import logging
 import datasets
-from model.model_base import RidgeModel
+from model.model_base import RidgeModel, GBDTModel
 
 GLOBAL_ARGS = {}
 
@@ -25,7 +26,7 @@ def get_model(data):
         # estimator = RandomForestRegressor(n_estimators=200, max_depth=3, max_features='sqrt',
         #                                   random_state=0, n_jobs=2)
     elif GLOBAL_ARGS['model'] == 'gbrt':
-        print ""
+        estimator = GBDTModel(data)
         # estimator = GradientBoostingRegressor(n_estimators=300, learning_rate=0.01,
         #                                       max_depth=3, random_state=0, loss='ls')
     return estimator
@@ -74,9 +75,12 @@ def process_input():
 
 
 def main():
+    logging.info("load data begin...")
     pcs = datasets.load_pcs_data()
+    logging.info("load data begin...")
     estimator = get_model(pcs)
     estimator.test()
+    logging.info("model test end...")
 
 
 if __name__ == '__main__':

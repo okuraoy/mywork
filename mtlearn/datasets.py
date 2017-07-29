@@ -8,6 +8,7 @@ from os.path import join
 
 PATH = "d:\\data"
 
+
 # class Bunch(dict):
 #     """Container object for datasets
 #     Dictionary-like object that exposes its keys as attributes.
@@ -48,8 +49,7 @@ def parse_date(x):
 
 def load_pcs_data():
     # column: date,pcs,f1,f2,...
-
-    df = pd.read_csv(join(PATH, "am000975-pcs.csv"), parse_dates=['date'], date_parser=parse_date)
+    df = pd.read_csv(join(PATH, 'spu_pcs.csv'), sep='\001', parse_dates=['date'], date_parser=parse_date)
     df.sort_values(by='date')
     columns = np.array(df.columns.values)
     feature_name = columns[1:]
@@ -58,10 +58,12 @@ def load_pcs_data():
     target = tmp_data[:, 1]
     data = tmp_data[:, 2:]
 
-    # print target
+    # print shape
     print data.shape
 
-    return Bunch(data=data, target=target, feature_name=feature_name, inx=inx_data)
+    print feature_name
+
+    return Bunch(data=data, target=target, feature_names=feature_name, inx=inx_data)
 
 
 if __name__ == '__main__':

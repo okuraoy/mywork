@@ -10,6 +10,7 @@ from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.model_selection import cross_val_score
 from sklearn.externals import joblib
 from mtlearn import evaluate
+import numpy as np
 
 
 class ModelBase(object):
@@ -61,7 +62,7 @@ class ModelBase(object):
         self._pre_result = self._clf.predict(data)
 
     def _cross_validation(self, cv=5):
-        self._score = cross_val_score(self._clf, self._data.data, self._data.target, cv=cv)
+        self._score = cross_val_score(self._clf, self._data.data, self._data.target, verbose=2, cv=cv)
 
     def evaluate(self, test_data):
         print '{0} model evaluate'.format(self.__class__.__name__)
@@ -114,9 +115,22 @@ class GBDTModel(ModelBase):
 
     def test(self):
         super(GBDTModel, self, ).test()
-        feature_importance = self._clf.feature_importances_
         mse = -self._score['neg_mean_squared_error']
+        r2 = self._score['r2']
         print 'MSE / Mean / Std: %0.2f %0.2f (+/- %0.2f)' % (mse, mse.mean(), mse.std() * 2)
+        print 'R2 / Mean / Std: %0.2f %0.2f (+/- %0.2f)' % (r2, r2.mean(), r2.std() * 2)
+
+        self._show_feature_importance()
 
     def predict(self, data):
         super(GBDTModel, self, ).predict(data)
+
+    def _show_feature_importance(self):
+        feature_importance = self._clf.feature_importances_
+        # feature_importance = 100.0 * (feature_importance / feature_importance.max())
+        sorted_idx = np.argsort(feature_importance)
+        print 'feature name \t importance '
+        for i in sorted_idx:
+            print '%s \t %0.4f ' % (self._data.feature_names[i], feature_importance[i])
+
+        evaluate.plot_importance(feature_importance, sorted_idx, self._data.feature_names)
