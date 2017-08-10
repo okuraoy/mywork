@@ -19,7 +19,6 @@ def get_model(data):
         print ""
         # estimator = LinearRegression()
     elif GLOBAL_ARGS['model'] == 'ridge':
-        print ""
         estimator = RidgeModel(data)
     elif GLOBAL_ARGS['model'] == 'rf':
         print ""
@@ -84,12 +83,12 @@ def main():
 
 
 if __name__ == '__main__':
-    try:
-        process_input()
-        main()
-        print u'程序执行完成，谢谢！'
-        time.sleep(5)
-    except Exception, e:
-        print str(e)
-        print u'程序异常，程序将在10s后退出'
-        time.sleep(5)
+    # try:
+    process_input()
+    main()
+    print u'程序执行完成，谢谢！'
+    time.sleep(5)
+    # except Exception, e:
+    #     print str(e)
+    #     print u'程序异常，程序将在10s后退出'
+    #     time.sleep(5)

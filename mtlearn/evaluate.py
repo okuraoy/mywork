@@ -29,7 +29,7 @@ def plot_predict_result(predict, actual):
 
 def plot_importance(importance, index, features):
     pos = np.arange(index.shape[0]) + .5
-    plt.subplot(1, 2, 2)
+    # plt.subplot(1, 2, 2)
     plt.barh(pos, importance[index], align='center')
     plt.yticks(pos, features[index])
     plt.xlabel('Importance')

@@ -49,10 +49,11 @@ def parse_date(x):
 
 def load_pcs_data():
     # column: date,pcs,f1,f2,...
-    df = pd.read_csv(join(PATH, 'spu_pcs.csv'), sep='\001', parse_dates=['date'], date_parser=parse_date)
+    #  sep='\001',
+    df = pd.read_csv(join(PATH, 'spu_pcs_20170721.csv'), sep='\001', parse_dates=['date'], date_parser=parse_date)
     df.sort_values(by='date')
     columns = np.array(df.columns.values)
-    feature_name = columns[1:]
+    feature_name = columns[2:]
     tmp_data = np.array(df)
     inx_data = tmp_data[:, 0]
     target = tmp_data[:, 1]
@@ -60,7 +61,6 @@ def load_pcs_data():
 
     # print shape
     print data.shape
-
     print feature_name
 
     return Bunch(data=data, target=target, feature_names=feature_name, inx=inx_data)
